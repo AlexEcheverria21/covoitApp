@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        // Table pivot pour la relation Frequente (Employes <-> Campuses)
+        Schema::create('campus_employe', function (Blueprint $table) {
+            $table->foreignId('campus_id')->constrained('campuses')->onDelete('cascade');
+            $table->foreignId('employe_id')->constrained('employes')->onDelete('cascade');
+            $table->primary(['campus_id', 'employe_id']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('campus_employe');
+    }
+};
