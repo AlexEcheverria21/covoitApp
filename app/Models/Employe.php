@@ -43,4 +43,36 @@ class Employe extends Model
         return $this->belongsToMany(Trajet::class, 'employe_trajet', 'employe_id', 'trajet_id')
             ->withPivot('date_inscription');
     }
+
+    /**
+     * i. Compter les voitures d'un employé
+     */
+    public function compterVoitures(): int
+    {
+        return $this->voitures()->count();
+    }
+
+    /**
+     * ii. Vérifier si l'employé possède des véhicules appartenant à un modèle particulier
+     */
+    public function possedModele(string $modele): bool
+    {
+        return $this->voitures()->where('modele', $modele)->exists();
+    }
+
+    /**
+     * iii. Retourner un statut selon le nombre de véhicules possédés
+     */
+    public function statut(): string
+    {
+        $nbVoitures = $this->compterVoitures();
+
+        if ($nbVoitures === 0) {
+            return 'Pas conducteur';
+        } elseif ($nbVoitures === 1) {
+            return 'Conducteur';
+        } else {
+            return 'Conducteur très actif';
+        }
+    }
 }
